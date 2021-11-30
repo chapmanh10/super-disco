@@ -76,14 +76,14 @@ var displaySchedule = function () {
 
     //decorating future hours
     for (var i = currentHourIndex+1; i < 9; i++) {
-        $("#"+ i).addClass("future")
+        $("#"+ i).find("textarea").addClass("future")
     }
     for (var i = currentHourIndex-1; i >= 0; i--) {
-        $("#"+ i).addClass("past")
+        $("#"+ i).find("textarea").addClass("past")
     }
 
     if (currentHourIndex > -1 && currentHourIndex < 9 ) {
-        $("#" + currentHourIndex).addClass("present")
+        $("#" + currentHourIndex).find("textarea").addClass("present")
     }
 }
 
