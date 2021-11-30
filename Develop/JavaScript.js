@@ -5,13 +5,35 @@ var currentHourIndex = 0
 var now = moment()
 $("#currentDay").text(moment(now).format('dddd, MMMM Do YYYY'));
 
+var createRow = function(id) {
+    var timeBlock = document.createElement("div")
+    timeBlock.classList.add("time-block")
+    var row = document.createElement("div")
+
+    row.classList.add("row")
+    row.id = id
+    var hour = document.createElement("div")
+    hour.classList.add("hour")
+    hour.innerHTML = hours[id]
+    var text = document.createElement("textarea")
+    text.classList.add("description")
+    var save = document.createElement("button")
+    save.classList.add("saveBtn")
+    save.textContent = "save"
+
+    row.appendChild(hour)
+    row.appendChild(text)
+    row.appendChild(save)
+    timeBlock.appendChild(row)
+
+    return timeBlock;
+
+}
+
 var displaySchedule = function () {
 
     for (var i = 0; i < 9; i++) {
-        var timeBlock = document.createElement("div")
-        timeBlock.innerHTML = hours[i]
-        timeBlock.id = i
-        timeBlock.classList.add("hour")
+        var timeBlock = createRow(i)
         $("#scheduleContainer").append(timeBlock)
     }
     switch (new moment().hour()) {
@@ -42,9 +64,27 @@ var displaySchedule = function () {
         case 17:
             currentHourIndex = 8;
             break;
+        default:
+            if (moment().hour() > 17) {
+            currentHourIndex = 9
+            }
+            else {
+            currentHourIndex = -1
+            }
+
     }
 
+    //decorating future hours
+    for (var i = currentHourIndex+1; i < 9; i++) {
+        $("#"+ i).addClass("future")
+    }
+    for (var i = currentHourIndex-1; i >= 0; i--) {
+        $("#"+ i).addClass("past")
+    }
 
+    if (currentHourIndex > -1 && currentHourIndex < 9 ) {
+        $("#" + currentHourIndex).addClass("present")
+    }
 }
 
 
