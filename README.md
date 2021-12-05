@@ -10,4 +10,4 @@ This repository will show you my ability to:
 
 ### [Access the site by this link!](https://chapmanh10.github.io/weekly-calendar/)
 
-![Landing Page](./images/screengrab.jpeg)
+![Landing Page](./Develop/images/screengrab.jpeg)
