@@ -1,11 +1,13 @@
-var hours = ["9 am", "10 am", "11 am", "12 pm", "1 pm", "2 pm", "3 pm", "4 pm", "5 pm"]
+var hours = ["0900", "1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700"]
 var currentHourIndex = 0
+var textInput = ["", "", "", "", "", "", "", "", ""]
 
 // Current date at top of page
 var now = moment()
 $("#currentDay").text(moment(now).format('dddd, MMMM Do YYYY'));
 
-var createRow = function(id) {
+// Row structure
+var createRow = function (id) {
     var timeBlock = document.createElement("div")
     timeBlock.classList.add("time-block")
     var row = document.createElement("div")
@@ -17,9 +19,13 @@ var createRow = function(id) {
     hour.innerHTML = hours[id]
     var text = document.createElement("textarea")
     text.classList.add("description")
+    text.classList.add("col-9")
+    text.value = textInput[id]
     var save = document.createElement("button")
     save.classList.add("saveBtn")
     save.textContent = "save"
+    save.id = "btn-" + id
+    $(save).click(onSave)
 
     row.appendChild(hour)
     row.appendChild(text)
@@ -27,11 +33,13 @@ var createRow = function(id) {
     timeBlock.appendChild(row)
 
     return timeBlock;
+};
 
-}
 
 var displaySchedule = function () {
 
+    textInput = getStorage()
+    console.log(getStorage())
     for (var i = 0; i < 9; i++) {
         var timeBlock = createRow(i)
         $("#scheduleContainer").append(timeBlock)
@@ -66,28 +74,50 @@ var displaySchedule = function () {
             break;
         default:
             if (moment().hour() > 17) {
-            currentHourIndex = 9
+                currentHourIndex = 9
             }
             else {
-            currentHourIndex = -1
+                currentHourIndex = -1
             }
 
     }
 
-    //decorating future hours
-    for (var i = currentHourIndex+1; i < 9; i++) {
-        $("#"+ i).find("textarea").addClass("future")
+    // decorating hours
+    for (var i = currentHourIndex + 1; i < 9; i++) {
+        $("#" + i).find("textarea").addClass("future")
     }
-    for (var i = currentHourIndex-1; i >= 0; i--) {
-        $("#"+ i).find("textarea").addClass("past")
+    for (var i = currentHourIndex - 1; i >= 0; i--) {
+        $("#" + i).find("textarea").addClass("past")
     }
 
-    if (currentHourIndex > -1 && currentHourIndex < 9 ) {
+    if (currentHourIndex > -1 && currentHourIndex < 9) {
         $("#" + currentHourIndex).find("textarea").addClass("present")
     }
+};
+
+// Save button functionality
+var onSave = function (event) {
+    var id = event.target.id.substring(4)
+    var text = $("#" + id + " textarea").val()
+
+    textInput[id] = text
+    saveStorage()
+};
+
+var saveStorage = function () {
+    localStorage.setItem("textInput", JSON.stringify(textInput));
+};
+
+var getStorage = function () {
+    var stored = localStorage.getItem("textInput")
+    if (!stored) {
+        return textInput
+    }
+    else {
+        return JSON.parse(stored)
+    }
+
 }
-
-
 
 
 
